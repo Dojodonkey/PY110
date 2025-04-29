@@ -59,7 +59,6 @@ def after_midnight(time):
     split_time = time.split(':')
     hour = int(split_time[0])
     minute = int(split_time[1])
-    # print((hour * MINUTES_PER_HOUR) + minute)
     result = (hour * MINUTES_PER_HOUR) + minute
     while result >= 1440:
         result = result - 1440
