@@ -41,7 +41,8 @@ and can decide to either hit or stay.
 A hit means the player wants to be dealt another card.
 Remember, if his total exceeds 21, he will bust and lose the game.
 The decision to hit or stay depends on the player's cards and what the player thinks the dealer has.
-For example, if the dealer is showing a "10" (the other card is hidden), and the player has a "2" and a "4",
+For example,
+if the dealer is showing a "10" (the other card is hidden), and the player has a "2" and a "4",
 then the obvious choice is for the player to hit.
 The player can continue to hit as many times as they want.
 The turn is over when the player either busts or stays.
@@ -130,7 +131,7 @@ def players_turn():
     if busted(player):
         os.system('clear')
         show_final_hands()
-        prompt('Busted! You lose..')
+        prompt('BUSTED! You lose..')
         return False
 
     else:
@@ -149,10 +150,10 @@ def dealers_turn():
             deal_card(dealer)
 # check for busted hand
     if busted(dealer):
-            os.system('clear')
-            show_final_hands()
-            prompt('Dealer is busted! Player wins!')
-            return False
+        os.system('clear')
+        show_final_hands()
+        prompt('Dealer is busted! Player wins!')
+        return False
     return True
 
 # deal 1 card
@@ -173,8 +174,8 @@ def show_hand():
 def show_final_hands():
     os.system('clear')
     prompt('__Final Hands__')
-    prompt(f'Player: {player}')
-    prompt(f'Dealer: {dealer}')
+    prompt(f'Player: {player} TOTAL: {total(player)}')
+    prompt(f'Dealer: {dealer} TOTAL: {total(dealer)}')
 
 # compare hands
 def compare_hands():
@@ -184,12 +185,12 @@ def compare_hands():
     if player_points < dealer_points:
         prompt('Player wins!..')
         return 'player'
-    elif player_points == dealer_points:
-        prompt('It\'s a draw!..')
-        return 'draw'
-    else:
+    if player_points > dealer_points:
         prompt('The house wins!..')
         return 'dealer'
+    if player_points == dealer_points:
+        prompt('It\'s a draw!..')
+        return 'draw'
 
 # Game Begins:
 game_play = True
@@ -210,35 +211,55 @@ while game_play:
 
     # player's turns
     player1 =  players_turn()
-    dealer1 = dealers_turn()
+    if not busted(player):
+        dealer1 = dealers_turn()
+    else:
+        dealer1 = None
 
     # determine winner if both stay or if busted
-    if dealer1 == True and player1 == True:
+    if dealer1 is True and player1 is True:
         winner = compare_hands()
     elif busted(dealer):
         winner = 'player'
     elif busted(player):
         winner = 'dealer'
+    else:
+        winner = 'draw'
 
 
     # play again prompts using 'winner'
-    player_won = ['Beginner\'s luck...', 'Just a fluke...', 'You got balls kid...']
-    dealer_won = ['House always wins ;)...', 'Better luck next time pony boy...', 'Tough luck...']
-    draw_won = ['Let\'s settle this..', 'Well, every blue moon...', 'Looks like this ain\'t over...']
-
+    player_won = [
+        'Beginner\'s luck...',
+        'Just a fluke...',
+        'You got balls kid...',
+        ]
+    dealer_won = [
+        'House always wins ;)...',
+        'Better luck next time pony boy...',
+        'Tough luck...'
+        ]
+    draw_won = [
+        'Let\'s settle this..',
+        'Well, every blue moon...',
+        'Looks like this ain\'t over...'
+        ]
     while True:
-
+        #check winner and ask to play again accordingly
         if winner == 'player':
             play_again = input(f'=> {random.choice(player_won)}Play again?(y/n): ')
-        elif winner == 'draw':
+        if winner == 'draw':
             play_again = input(f'=> {random.choice(draw_won)}Play again?(y/n): ')
-        elif winner == 'dealer':
+        if winner == 'dealer':
             play_again = input(f'=> {random.choice(dealer_won)}Play again?(y/n): ')
-        #answer to play again
+        #answers to play again
         n_answers = ['Chicken', 'Weak sauce', 'Alright, walk away sunshine boy']
-        y_answers = ['Another round begins', 'Another round another dollar', 'Hold on to your hat, another round is beginning']
-
-        if play_again.lower().strip() == 'n':
+        y_answers = [
+            'Another round begins',
+            'Another round another dollar',
+            'Hold on to your hat, another round is beginning',
+            ]
+        #actions to response to play again?
+        if play_again == 'n':
             prompt(f'{random.choice(n_answers)}...')
             game_play = False
             break
@@ -247,4 +268,9 @@ while game_play:
             prompt(f'{random.choice(y_answers)}...')
             break
         else:
-            prompt(f'{random.choice(['Try again chico, I didn\'t get that', 'Take a deep breath and try that again'])}...')
+            invalid_prompt_responses = [
+                'Try again chico, I didn\'t get that',
+                'Take a deep breath and try that again',
+                ]
+            prompt(f'{random.choice(invalid_prompt_responses)}...')
+            #invalid response runs never ending loop of invalid_prompt_responses....
