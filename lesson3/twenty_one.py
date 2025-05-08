@@ -259,7 +259,7 @@ while game_play:
             'Hold on to your hat, another round is beginning',
             ]
         #actions to response to play again?
-        if play_again == 'n':
+        if play_again.lower().strip() == 'n':
             prompt(f'{random.choice(n_answers)}...')
             game_play = False
             break
@@ -269,8 +269,7 @@ while game_play:
             break
         else:
             invalid_prompt_responses = [
-                'Try again chico, I didn\'t get that',
-                'Take a deep breath and try that again',
-                ]
+            'Try again chico, I didn\'t get that',
+            'Take a deep breath and try that again',
+            ]
             prompt(f'{random.choice(invalid_prompt_responses)}...')
-            #invalid response runs never ending loop of invalid_prompt_responses....
