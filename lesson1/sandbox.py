@@ -1,59 +1,51 @@
 '''
-Detect Pangram
-A pangram is a sentence that contains every single letter of the alphabet at least once.
-For example: the sentence "The quick brown fox jumps over the lazy dog" is a pangram,
-because it uses the letters A-Z at least once (case is irrelevant).
-
-Given a string, detect whether or not it is a pangram.
-Return True if it is, False if not. Ignore numbers and punctuation.
-*/
-
-Understanding the Problem:
-- input: string
-- output: boolean value
-
-- explicit rules:
-    - if the input string contains every letter of the alphabet, return True, otherwise False.
-    - numbers and punctuation is ignored.
-    - case insensitive.
-- implicit rules:
-    - none
-
-- questions: none
-
-Examples/ Test Cases:
-
-// # Python test cases:
-// print(isPangram('The quick brown fox jumps over the lazy dog.') == True)
-// print(isPangram('This is not a pangram.') == False)
-
-- understanding confirmed.
-
-Data Structures:
-
-- string to iterate through and check for membership.
-
-- High Level Strategy:
-    - iterate through a string containing all letters of the alphabet and
-    check for membership in the input string.
-
-Algorithm:
-
-1. create a string containing all letters of the alphabet.
-2. iterate through that string and check for membership in the input string.
-    - if any of the chars in 'alphabet' are not in the input string, return the bool value False.
-    - otherwise return True.
+if any of the input strings no not consist of any alphabetical letters, return an empty list.
+break the input string up into a list. initialize 'count_dict' to an empty dictionary.
+iterate through that list of words. build up 'count' dict using the count of each word.
+    - if that word is already in the dictionary just update the value by 1.
+    - if not, add that key to the dictionary with a value of 1.
+then create out of the values in 'count_dict' and sort this list in descending order.
+reassign it to only include the first 3 elements.
+init 'max_words' to an empty list.
+iterate through our value list.
+    - if they match any value in 'count_dict', add that key to 'max_words'.
+return 'max_words'.
 '''
+def top_3_words(strng):
+    if all(not char.isalpha() for char in strng):
+        return []
 
-def is_pangram(strng):
-    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    cleaned_str_split = [word if word[-1].isalpha()
+                         else word[:-1] for word in strng.split()]
+    cleaned_str_split = [word for word in cleaned_str_split
+                         if any(char.isalpha() for char in word)]
 
-    for char in alphabet:
-        if char.lower() not in strng:
-            return False
+    count_dict = {}
 
-    return True
+    for word in cleaned_str_split:
+        if word not in count_dict:
+            count_dict[word] = cleaned_str_split.count(word)
 
-# Python test cases:
-print(is_pangram('The quick brown fox jumps over the lazy dog.') == True)
-print(is_pangram('This is not a pangram.') == False)
+    max_values = sorted((val for val in count_dict.values()),
+                         reverse=True)[:3]
+    max_words = []
+
+    for m_value in max_values:
+        for key, value in count_dict.items():
+            if m_value == value:
+                max_words.append(key)
+
+    return max_words
+
+
+
+print(top_3_words(" , e .. ")) # ["e"]
+print(top_3_words(" ... ")) # []
+print(top_3_words(" ' ")) # []
+print(top_3_words(" ' ' ' ")) # []
+print(top_3_words("""In a village of La Mancha, the name of which I have no desire to call to
+mind, there lived not long since one of those gentlemen that keep a lance
+in the lance-rack, an old buckler, a lean hack, and a greyhound for
+coursing. An olla of rather more beef than mutton, a salad on most
+nights, scraps on Saturdays, lentils on Fridays, and a pigeon or so extra
+on Sundays, made away with three-quarters of his income.""")) # should return ["a", "of", "on"]

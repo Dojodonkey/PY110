@@ -41,10 +41,6 @@ def egyptian(fractional_num):
     return denominators
 
 def unegyptian(lst_of_denominators):
-    # sum_ = 0
-    # for denominator in lst_of_denominators:
-    #     sum_ +=  Fraction(1, denominator)
-    # return sum_
     return sum([Fraction(1, d) for d in lst_of_denominators])
 
 # Using the egyptian function
