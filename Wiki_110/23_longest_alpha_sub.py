@@ -32,9 +32,6 @@ if not, break.
 3. return 'alpha_sub'
 '''
 def longest(strng):
-    if not strng:
-        return ''
-
     sub = strng[0]
     max_sub = sub
 

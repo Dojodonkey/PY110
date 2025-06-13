@@ -1,51 +1,94 @@
 '''
-if any of the input strings no not consist of any alphabetical letters, return an empty list.
-break the input string up into a list. initialize 'count_dict' to an empty dictionary.
-iterate through that list of words. build up 'count' dict using the count of each word.
-    - if that word is already in the dictionary just update the value by 1.
-    - if not, add that key to the dictionary with a value of 1.
-then create out of the values in 'count_dict' and sort this list in descending order.
-reassign it to only include the first 3 elements.
-init 'max_words' to an empty list.
-iterate through our value list.
-    - if they match any value in 'count_dict', add that key to 'max_words'.
-return 'max_words'.
+Problem 1: Count Character Frequency
+Difficulty​: Intermediate
+Create a function that takes a string argument
+and returns a dictionary where the keys are the lowercase letters
+in the string and the values represent how often each letter occurs.
+Ignore non-alphabetic characters.
+
+P:
+- input: string
+- output: dictionary
+
+- explicits:
+    - return a dictionary with lower case chars as keys and occurrences as values.
+- implicits:
+    - some strings contain only none alphabetic keys.
+        - guard clause
+
+D:
+- dictionary to be returned.
+- integer to represent occurrences of lower case char.
+- string to represent lower case char.
+- bool to check if a char is lower case and alphabetic.
+- set containing unique chars of input string.
+    -avoid unnecessary iterations.
+
+A:
+-HL-
+iterate through set of chars based on input string.
+if a char is lower case and alphabetic, add that char as a key and occurrences as value.
+
+- guard clause: if all chars in input string are non-alpha, return an empty dict.
+1. init 'strng_set' to a set based on chars from input string.
+2. init 'lower_dict' to an empty dict.
+3. iterate through 'strng_set'.
+    - add char as a key mapped to occurrences as values.
+4. return 'lower_dict'.
+
+C:
 '''
-def top_3_words(strng):
-    if all(not char.isalpha() for char in strng):
-        return []
+def count_letters(string):
+    """
+    Count the frequency of each letter in a string, ignoring non-alphabetic characters.
+    Letters are case-insensitive (a and A count as the same letter).
 
-    cleaned_str_split = [word if word[-1].isalpha()
-                         else word[:-1] for word in strng.split()]
-    cleaned_str_split = [word for word in cleaned_str_split
-                         if any(char.isalpha() for char in word)]
+    Args:
+        string: A string to analyze
 
-    count_dict = {}
+    Returns:
+        A dictionary with lowercase letters as keys and their frequency as values
+    """
+    if all(not char.isalpha() for char in string):
+        return {}
 
-    for word in cleaned_str_split:
-        if word not in count_dict:
-            count_dict[word] = cleaned_str_split.count(word)
+    string = string.lower()
+    return {char: string.count(char) for char in set(string)
+            if char.isalpha()}
 
-    max_values = sorted((val for val in count_dict.values()),
-                         reverse=True)[:3]
-    max_words = []
+# Test cases
+print(count_letters('woebegone') == {'w': 1, 'o': 2, 'e': 3, 'b': 1, 'g': 1, 'n': 1})
+print(count_letters('lowercase/uppercase') == {'l': 1, 'o': 1, 'w': 1, 'e': 4, 'r': 2, 'c': 2, 'a': 2, 's': 2, 'u': 1, 'p': 2})
+print(count_letters('W. E. B. Du Bois') == {'u': 1, 'o': 1, 'i': 1, 's': 1, 'b': 2, 'd': 1, 'e': 1, 'w': 1})
+# test case still incorrect as 'B' occurs twice.
+print(count_letters('x') == {'x': 1})
+print(count_letters('') == {})
+print(count_letters('!!!') == {})
+'''Problem 2: Even-Numbered Substrings
+Difficulty​: Advanced
+Create a function that takes a string of digits as an argument
+and returns the number of even-numbered substrings that can be formed.
+If a substring occurs more than once, count each occurrence as a separate substring.
+For example, in the string '1432':
+•   Even-numbered substrings: '14', '1432', '4', '432', '32', '2'
+•   Total: 6 substrings
+'''
+# def even_substrings(string):
+#     """
+#     Count the number of even-numbered substrings that can be formed from a string of digits.
 
-    for m_value in max_values:
-        for key, value in count_dict.items():
-            if m_value == value:
-                max_words.append(key)
+#     Args:
+#         string: A string containing only digits
 
-    return max_words
+#     Returns:
+#         An integer representing the count of even-numbered substrings
+#     """
+#     # Your solution here
+#     pass
 
-
-
-print(top_3_words(" , e .. ")) # ["e"]
-print(top_3_words(" ... ")) # []
-print(top_3_words(" ' ")) # []
-print(top_3_words(" ' ' ' ")) # []
-print(top_3_words("""In a village of La Mancha, the name of which I have no desire to call to
-mind, there lived not long since one of those gentlemen that keep a lance
-in the lance-rack, an old buckler, a lean hack, and a greyhound for
-coursing. An olla of rather more beef than mutton, a salad on most
-nights, scraps on Saturdays, lentils on Fridays, and a pigeon or so extra
-on Sundays, made away with three-quarters of his income.""")) # should return ["a", "of", "on"]
+# # Test cases
+# print(even_substrings('1432') == 6)
+# print(even_substrings('3145926') == 16)
+# print(even_substrings('2718281') == 16)
+# print(even_substrings('13579') == 0)
+# print(even_substrings('143232') == 12)
